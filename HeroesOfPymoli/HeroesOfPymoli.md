@@ -225,9 +225,9 @@ gender_demo = pd.DataFrame({"Total Count": gender_count,
 gender_demo["Percentage of Players"] = gender_demo["Percentage of Players"].apply("{0:.2f}%".format)
 
 # Rename the axis to show data label "Gender"
-gender_demo = gender_demo.rename_axis("Gender")
+gender_demo.index.name = "Gender"
 
-gender_demo.reset_index()
+gender_demo
 ```
 
 
@@ -251,27 +251,28 @@ gender_demo.reset_index()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Gender</th>
       <th>Total Count</th>
       <th>Percentage of Players</th>
+    </tr>
+    <tr>
+      <th>Gender</th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>Male</td>
+      <th>Male</th>
       <td>484</td>
       <td>84.03%</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>Female</td>
+      <th>Female</th>
       <td>81</td>
       <td>14.06%</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>Other / Non-Disclosed</td>
+      <th>Other / Non-Disclosed</th>
       <td>11</td>
       <td>1.91%</td>
     </tr>
@@ -313,7 +314,7 @@ purchasing_gender["Total Purchase Value"] = purchasing_gender["Total Purchase Va
 purchasing_gender["Avg Total Purchase per Person"] = purchasing_gender["Avg Total Purchase per Person"].apply("${:.2f}".format)
 purchasing_gender = purchasing_gender[["Purchase Count", "Average Purchase Price", "Total Purchase Value", "Avg Total Purchase per Person"]]
 
-purchasing_gender.reset_index()
+purchasing_gender
 ```
 
 
@@ -337,33 +338,36 @@ purchasing_gender.reset_index()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Gender</th>
       <th>Purchase Count</th>
       <th>Average Purchase Price</th>
       <th>Total Purchase Value</th>
       <th>Avg Total Purchase per Person</th>
     </tr>
+    <tr>
+      <th>Gender</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>Female</td>
+      <th>Female</th>
       <td>113</td>
       <td>$3.20</td>
       <td>$361.94</td>
       <td>$4.47</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>Male</td>
+      <th>Male</th>
       <td>652</td>
       <td>$3.02</td>
       <td>$1967.64</td>
       <td>$4.07</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>Other / Non-Disclosed</td>
+      <th>Other / Non-Disclosed</th>
       <td>15</td>
       <td>$3.35</td>
       <td>$50.19</td>
@@ -387,65 +391,98 @@ bins = [0,9,14,19,24,29,34,39,100]
 age_group = ["<10","10-14","15-19","20-24","25-29","30-34","35-39","40+"]
 
 # Categorize the existing players using the age bins. 
-players['Age Range'] = pd.cut(players['Age'], bins)
+players['Age Range'] = pd.cut(players['Age'], bins, labels = age_group)
 
 # Calculate the numbers and percentages by age group
 age_count = players["Age Range"].value_counts()
 age_percent = ((age_count/players["SN"].count()) * 100).round(2)
 
-# Display results in DataFrame and format Percentage of Players values to percent %
-players = pd.DataFrame({'Age Ranges': age_group, 'Total Count': age_count,'Percentage of Players': age_percent})
+# Display results in DataFrame 
+players = pd.DataFrame({'Total Count': age_count,
+                        'Percentage of Players': age_percent})
+#Rename index axis 
+players.index.name = 'Age Ranges'
+            
+# Format Percentage of Players values to percent %
 players['Percentage of Players'] = players['Percentage of Players'].apply('{:.2f}%'.format)
 
-players.style.hide_index()
+players.sort_index()
 ```
 
 
 
 
-<style  type="text/css" >
-</style><table id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8" ><thead>    <tr>        <th class="col_heading level0 col0" >Age Ranges</th>        <th class="col_heading level0 col1" >Total Count</th>        <th class="col_heading level0 col2" >Percentage of Players</th>    </tr></thead><tbody>
-                <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row0_col0" class="data row0 col0" ><10</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row0_col1" class="data row0 col1" >258</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row0_col2" class="data row0 col2" >44.79%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row1_col0" class="data row1 col0" >10-14</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row1_col1" class="data row1 col1" >107</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row1_col2" class="data row1 col2" >18.58%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row2_col0" class="data row2 col0" >15-19</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row2_col1" class="data row2 col1" >77</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row2_col2" class="data row2 col2" >13.37%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row3_col0" class="data row3 col0" >20-24</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row3_col1" class="data row3 col1" >52</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row3_col2" class="data row3 col2" >9.03%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row4_col0" class="data row4 col0" >25-29</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row4_col1" class="data row4 col1" >31</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row4_col2" class="data row4 col2" >5.38%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row5_col0" class="data row5 col0" >30-34</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row5_col1" class="data row5 col1" >22</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row5_col2" class="data row5 col2" >3.82%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row6_col0" class="data row6 col0" >35-39</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row6_col1" class="data row6 col1" >17</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row6_col2" class="data row6 col2" >2.95%</td>
-            </tr>
-            <tr>
-                                <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row7_col0" class="data row7 col0" >40+</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row7_col1" class="data row7 col1" >12</td>
-                        <td id="T_c0ec148a_0d5e_11eb_b98d_d8c4970340e8row7_col2" class="data row7 col2" >2.08%</td>
-            </tr>
-    </tbody></table>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Total Count</th>
+      <th>Percentage of Players</th>
+    </tr>
+    <tr>
+      <th>Age Ranges</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>&lt;10</th>
+      <td>17</td>
+      <td>2.95%</td>
+    </tr>
+    <tr>
+      <th>10-14</th>
+      <td>22</td>
+      <td>3.82%</td>
+    </tr>
+    <tr>
+      <th>15-19</th>
+      <td>107</td>
+      <td>18.58%</td>
+    </tr>
+    <tr>
+      <th>20-24</th>
+      <td>258</td>
+      <td>44.79%</td>
+    </tr>
+    <tr>
+      <th>25-29</th>
+      <td>77</td>
+      <td>13.37%</td>
+    </tr>
+    <tr>
+      <th>30-34</th>
+      <td>52</td>
+      <td>9.03%</td>
+    </tr>
+    <tr>
+      <th>35-39</th>
+      <td>31</td>
+      <td>5.38%</td>
+    </tr>
+    <tr>
+      <th>40+</th>
+      <td>12</td>
+      <td>2.08%</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
@@ -454,7 +491,7 @@ players.style.hide_index()
 
 ```python
 # Categorize the players using the age bins. 
-data['Age Ranges'] = pd.cut(data['Age'], bins)
+data['Age Ranges'] = pd.cut(data['Age'], bins, labels=age_group)
 age_count = data["Age Ranges"].value_counts()
 
 # Count the amount of purchases by age
@@ -474,8 +511,7 @@ age_dup = duplicates.groupby(["Age Ranges"])
 avg_tot_age = (purch_tot_age / age_dup["SN"].count())
 
 # Display results in DataFrame 
-purchasing_age = pd.DataFrame({'Age Ranges': age_group, 
-                               'Purchase Count': purch_count_age,
+purchasing_age = pd.DataFrame({'Purchase Count': purch_count_age,
                                'Average Purchase Price': avg_price_age,
                                'Total Purchase Value': purch_tot_age, 
                                'Avg Total Purchase per Person': avg_tot_age})
@@ -485,74 +521,106 @@ purchasing_age = pd.DataFrame({'Age Ranges': age_group,
 purchasing_age["Average Purchase Price"] = purchasing_age["Average Purchase Price"].apply("${:.2f}".format)
 purchasing_age["Total Purchase Value"] = purchasing_age["Total Purchase Value"].apply("${:.2f}".format)
 purchasing_age["Avg Total Purchase per Person"] = purchasing_age["Avg Total Purchase per Person"].apply("${:.2f}".format)
-purchasing_age = purchasing_age[["Age Ranges","Purchase Count", "Average Purchase Price", "Total Purchase Value", "Avg Total Purchase per Person"]]
+purchasing_age = purchasing_age[["Purchase Count", "Average Purchase Price", "Total Purchase Value", "Avg Total Purchase per Person"]]
 
 
-purchasing_age.style.hide_index()
+purchasing_age.sort_index()
 ```
 
 
 
 
-<style  type="text/css" >
-</style><table id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8" ><thead>    <tr>        <th class="col_heading level0 col0" >Age Ranges</th>        <th class="col_heading level0 col1" >Purchase Count</th>        <th class="col_heading level0 col2" >Average Purchase Price</th>        <th class="col_heading level0 col3" >Total Purchase Value</th>        <th class="col_heading level0 col4" >Avg Total Purchase per Person</th>    </tr></thead><tbody>
-                <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row0_col0" class="data row0 col0" ><10</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row0_col1" class="data row0 col1" >23</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row0_col2" class="data row0 col2" >$3.35</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row0_col3" class="data row0 col3" >$77.13</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row0_col4" class="data row0 col4" >$4.54</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row1_col0" class="data row1 col0" >10-14</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row1_col1" class="data row1 col1" >28</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row1_col2" class="data row1 col2" >$2.96</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row1_col3" class="data row1 col3" >$82.78</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row1_col4" class="data row1 col4" >$3.76</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row2_col0" class="data row2 col0" >15-19</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row2_col1" class="data row2 col1" >136</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row2_col2" class="data row2 col2" >$3.04</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row2_col3" class="data row2 col3" >$412.89</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row2_col4" class="data row2 col4" >$3.86</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row3_col0" class="data row3 col0" >20-24</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row3_col1" class="data row3 col1" >365</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row3_col2" class="data row3 col2" >$3.05</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row3_col3" class="data row3 col3" >$1114.06</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row3_col4" class="data row3 col4" >$4.32</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row4_col0" class="data row4 col0" >25-29</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row4_col1" class="data row4 col1" >101</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row4_col2" class="data row4 col2" >$2.90</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row4_col3" class="data row4 col3" >$293.00</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row4_col4" class="data row4 col4" >$3.81</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row5_col0" class="data row5 col0" >30-34</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row5_col1" class="data row5 col1" >73</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row5_col2" class="data row5 col2" >$2.93</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row5_col3" class="data row5 col3" >$214.00</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row5_col4" class="data row5 col4" >$4.12</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row6_col0" class="data row6 col0" >35-39</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row6_col1" class="data row6 col1" >41</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row6_col2" class="data row6 col2" >$3.60</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row6_col3" class="data row6 col3" >$147.67</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row6_col4" class="data row6 col4" >$4.76</td>
-            </tr>
-            <tr>
-                                <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row7_col0" class="data row7 col0" >40+</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row7_col1" class="data row7 col1" >13</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row7_col2" class="data row7 col2" >$2.94</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row7_col3" class="data row7 col3" >$38.24</td>
-                        <td id="T_c0f66b6c_0d5e_11eb_b8cf_d8c4970340e8row7_col4" class="data row7 col4" >$3.19</td>
-            </tr>
-    </tbody></table>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Purchase Count</th>
+      <th>Average Purchase Price</th>
+      <th>Total Purchase Value</th>
+      <th>Avg Total Purchase per Person</th>
+    </tr>
+    <tr>
+      <th>Age Ranges</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>&lt;10</th>
+      <td>23</td>
+      <td>$3.35</td>
+      <td>$77.13</td>
+      <td>$4.54</td>
+    </tr>
+    <tr>
+      <th>10-14</th>
+      <td>28</td>
+      <td>$2.96</td>
+      <td>$82.78</td>
+      <td>$3.76</td>
+    </tr>
+    <tr>
+      <th>15-19</th>
+      <td>136</td>
+      <td>$3.04</td>
+      <td>$412.89</td>
+      <td>$3.86</td>
+    </tr>
+    <tr>
+      <th>20-24</th>
+      <td>365</td>
+      <td>$3.05</td>
+      <td>$1114.06</td>
+      <td>$4.32</td>
+    </tr>
+    <tr>
+      <th>25-29</th>
+      <td>101</td>
+      <td>$2.90</td>
+      <td>$293.00</td>
+      <td>$3.81</td>
+    </tr>
+    <tr>
+      <th>30-34</th>
+      <td>73</td>
+      <td>$2.93</td>
+      <td>$214.00</td>
+      <td>$4.12</td>
+    </tr>
+    <tr>
+      <th>35-39</th>
+      <td>41</td>
+      <td>$3.60</td>
+      <td>$147.67</td>
+      <td>$4.76</td>
+    </tr>
+    <tr>
+      <th>40+</th>
+      <td>13</td>
+      <td>$2.94</td>
+      <td>$38.24</td>
+      <td>$3.19</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
@@ -581,7 +649,7 @@ top_spenders = top_spenders.sort_values(by = "Total Purchase Value",ascending = 
 # Change the format to currency
 top_spenders["Total Purchase Value"] = top_spenders["Total Purchase Value"].map("${:.2f}".format)
 
-top_spenders.reset_index().head()
+top_spenders.head()
 ```
 
 
@@ -605,44 +673,44 @@ top_spenders.reset_index().head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>SN</th>
       <th>Purchase Count</th>
       <th>Average Purchase Price</th>
       <th>Total Purchase Value</th>
     </tr>
+    <tr>
+      <th>SN</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>Lisosia93</td>
+      <th>Lisosia93</th>
       <td>5</td>
       <td>$3.79</td>
       <td>$18.96</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>Idastidru52</td>
+      <th>Idastidru52</th>
       <td>4</td>
       <td>$3.86</td>
       <td>$15.45</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>Chamjask73</td>
+      <th>Chamjask73</th>
       <td>3</td>
       <td>$4.61</td>
       <td>$13.83</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>Iral74</td>
+      <th>Iral74</th>
       <td>4</td>
       <td>$3.40</td>
       <td>$13.62</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>Iskadarya95</td>
+      <th>Iskadarya95</th>
       <td>3</td>
       <td>$4.37</td>
       <td>$13.10</td>
@@ -678,7 +746,7 @@ items = items.sort_values("Purchase Count", ascending = False)
 items[["Item Price", "Total Purchase Value"]] \
 = items[["Item Price", "Total Purchase Value"]].applymap("${:.2f}".format)
 
-items.reset_index().head()
+items.head()
 ```
 
 
@@ -702,50 +770,51 @@ items.reset_index().head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Item ID</th>
-      <th>Item Name</th>
+      <th></th>
       <th>Purchase Count</th>
       <th>Item Price</th>
       <th>Total Purchase Value</th>
     </tr>
+    <tr>
+      <th>Item ID</th>
+      <th>Item Name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>92</td>
-      <td>Final Critic</td>
+      <th>92</th>
+      <th>Final Critic</th>
       <td>13</td>
       <td>$4.61</td>
       <td>$59.99</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>178</td>
-      <td>Oathbreaker, Last Hope of the Breaking Storm</td>
+      <th>178</th>
+      <th>Oathbreaker, Last Hope of the Breaking Storm</th>
       <td>12</td>
       <td>$4.23</td>
       <td>$50.76</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>145</td>
-      <td>Fiery Glass Crusader</td>
+      <th>145</th>
+      <th>Fiery Glass Crusader</th>
       <td>9</td>
       <td>$4.58</td>
       <td>$41.22</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>132</td>
-      <td>Persuasion</td>
+      <th>132</th>
+      <th>Persuasion</th>
       <td>9</td>
       <td>$3.22</td>
       <td>$28.99</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>108</td>
-      <td>Extraction, Quickblade Of Trembling Hands</td>
+      <th>108</th>
+      <th>Extraction, Quickblade Of Trembling Hands</th>
       <td>9</td>
       <td>$3.53</td>
       <td>$31.77</td>
@@ -770,7 +839,7 @@ items = items.sort_values("Total Purchase Value", ascending = False)
 # Change the format to currency
 items["Total Purchase Value"] = items["Total Purchase Value"].apply("${:.2f}".format)
 
-items.reset_index().head()
+items.head()
 ```
 
 
@@ -794,50 +863,51 @@ items.reset_index().head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Item ID</th>
-      <th>Item Name</th>
+      <th></th>
       <th>Purchase Count</th>
       <th>Item Price</th>
       <th>Total Purchase Value</th>
     </tr>
+    <tr>
+      <th>Item ID</th>
+      <th>Item Name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>92</td>
-      <td>Final Critic</td>
+      <th>92</th>
+      <th>Final Critic</th>
       <td>13</td>
       <td>$4.61</td>
       <td>$59.99</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>178</td>
-      <td>Oathbreaker, Last Hope of the Breaking Storm</td>
+      <th>178</th>
+      <th>Oathbreaker, Last Hope of the Breaking Storm</th>
       <td>12</td>
       <td>$4.23</td>
       <td>$50.76</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>82</td>
-      <td>Nirvana</td>
+      <th>82</th>
+      <th>Nirvana</th>
       <td>9</td>
       <td>$4.90</td>
       <td>$44.10</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>145</td>
-      <td>Fiery Glass Crusader</td>
+      <th>145</th>
+      <th>Fiery Glass Crusader</th>
       <td>9</td>
       <td>$4.58</td>
       <td>$41.22</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>103</td>
-      <td>Singed Scalpel</td>
+      <th>103</th>
+      <th>Singed Scalpel</th>
       <td>8</td>
       <td>$4.35</td>
       <td>$34.80</td>
