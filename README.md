@@ -12,7 +12,7 @@ The data analysis for "Heroes of Pymoli" was performed using pandas through Jupy
 
 The first data collected in this analysis was the count of players. It was noted that some players made multiple purchases. Therefore, it was very important to drop duplicate players (SN). 
 
-After obtaining the count of players (579), an analysis on the purchasing total was performed to count the number of unique items, obtain a count on the number of purchases and calculate the total revenue. The following results were obtained:
+After obtaining the count of players (576), an analysis on the purchasing total was performed to count the number of unique items, obtain a count on the number of purchases and calculate the total revenue. The following results were obtained:
 
 | Number of Unique Items | Average Price | Number of Purchases | Total Revenue |
 | ---------------------- | ------------- | ------------------- | ------------- |
